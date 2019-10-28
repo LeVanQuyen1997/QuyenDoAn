@@ -1,0 +1,43 @@
+const express=require('express');
+const router=express.Router();
+const GroupCate=require('./../models/groupCatelogy');
+
+
+router.get('/',async(req,res)=>{
+    const groupCate= await GroupCate.find();
+    res.json(groupCate);
+});
+
+router.post('/',async(req,res)=>{
+    const {storeID,name}=req.body;
+    const groupCate=new GroupCate({storeID,name});
+    await groupCate.save().then(result=>{
+        res.send("ngon");
+    }).catch(err=>{
+        res.send("loi");
+    })
+});
+
+router.put('/:id',async(req,res)=>{
+    const {storeID,name}=req.body;
+    const newGroupCate={storeID,name};
+    await GroupCate.findByIdAndUpdate(req.params.id,newGroupCate).then(result=>{
+        res.send("ngon");
+    }).catch(err=>{
+        res.send("loi");
+    })
+});
+router.delete('/:id',async(req,res)=>{
+    console.log(req.params.id);
+    await GroupCate.findByIdAndRemove(req.params.id).then(result=>{
+        res.send("ngon");
+    }).catch(err=>{
+        res.send("loi");
+    })
+});
+
+router.get('/:id',async(req,res)=>{
+    const groupCate=await GroupCate.findById(req.params.id);
+    res.json(groupCate);
+});
+module.exports=router;
